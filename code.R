@@ -41,6 +41,3 @@ leaflet(mapdata) %>%
                 bringToFront = TRUE)) %>% 
   addLegend(pal = pal, values = ~sigtext, title = "Poverty turnover rate (cf 53% city mean)",
             position = "bottomleft", opacity = 0.7)
-
-
-
