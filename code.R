@@ -16,20 +16,31 @@ for (i in 1:length(areaCodes)) {
 }
 
 # link boundary data to attribute data
-boundaries@data <- left_join(boundaries@data, povData, by=c("LSOA11CD"="LSOA"))
+mapdata <- boundaries 
+mapdata@data <- left_join(mapdata@data, povData, by=c("LSOA11CD"="LSOA"))
 
 # labels
-labels <- sprintf("%g%% turnover rate", boundaries$turnoverRate) %>% 
+labels <- sprintf("%g%% turnover rate<br />%d poor families in 2010", mapdata$turnoverRate, mapdata$total) %>% 
   lapply(htmltools::HTML)
 
 # present on a map
-pal <- colorFactor(c("grey", "green", "red"), domain = boundaries$sigtext)
-leaflet(boundaries) %>%
+pal <- colorFactor(c("grey", "blue", "orange"), domain = mapdata$sigtext)
+leaflet(mapdata) %>%
   addTiles() %>% 
   addProviderTiles("CartoDB.Positron") %>% 
   addPolygons(fillColor = ~pal(sigtext),
               weight = 1,
               opacity = 1,
               color = "grey", 
-              popup = labels)
+              fillOpacity = 0.3,
+              label = labels, 
+              highlight = highlightOptions(
+                weight = 2,
+                color = "#666",
+                fillOpacity = 0.7,
+                bringToFront = TRUE)) %>% 
+  addLegend(pal = pal, values = ~sigtext, title = "Poverty turnover rate (cf 53% city mean)",
+            position = "bottomleft", opacity = 0.7)
+
+
 
