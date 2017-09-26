@@ -20,7 +20,7 @@ mapdata <- boundaries
 mapdata@data <- left_join(mapdata@data, povData, by=c("LSOA11CD"="LSOA"))
 
 # labels
-labels <- sprintf("%g%% turnover rate<br />%d poor families in 2010", mapdata$turnoverRate, mapdata$total) %>% 
+labels <- sprintf("%g%% turnover rate", mapdata$turnoverRate) %>% 
   lapply(htmltools::HTML)
 
 # present on a map
@@ -39,5 +39,5 @@ leaflet(mapdata) %>%
                 color = "#666",
                 fillOpacity = 0.7,
                 bringToFront = TRUE)) %>% 
-  addLegend(pal = pal, values = ~sigtext, title = "Poverty turnover rate (cf 53% city mean)",
+  addLegend(pal = pal, values = ~sigtext, title = "Poverty turnover rate<br />(cf 53% city mean)",
             position = "bottomleft", opacity = 0.7)
